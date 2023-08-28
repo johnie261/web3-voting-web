@@ -36,20 +36,19 @@ const allowedVoters = () => {
   
   return (
     <div className={Style.createVoter}>
-        <h1>JOHN JOHN JOHN</h1>
         <div>
         {fileUrl && (
         <div className={Style.voterInfo}>
             <img src={fileUrl} alt="Voter image"/>
             <div className={Style.voterInfo_paragraph}>
                 <p>
-                    Name: <span>&nbps; {formInput.name}</span>
+                    Name: <span>&nbsp;{formInput.name}</span>
                 </p>
                 <p>
-                    Address: <span>&nbps; {formInput.address.slice(0, 20)}</span>
+                    Address: <span>&nbsp; {formInput.address.slice(0, 20)}</span>
                 </p>
                 <p>
-                    Position: <span>&nbps; {formInput.position}</span>
+                    Position: <span>&nbsp; {formInput.position}</span>
                 </p>
             </div>
         </div>
@@ -65,7 +64,7 @@ const allowedVoters = () => {
                     </p>
                 </div>
 
-                <div className={Style.car}>
+                <div className={Style.card}>
                     {/* {voterArray.map((e, i) => (
                         <div key={i+1} className={Style.card_box}>
                             <div className={Style.image}>
@@ -114,7 +113,39 @@ const allowedVoters = () => {
             </div>
 
             <div className={Style.input_container}> 
-                <Input />
+                <Input 
+                    inputType="text"
+                    title="Name"
+                    placeholder="Voter Name"
+                    handleClick={(e) => setFormInput({...formInput, name: e.target.value})}
+                />
+
+                <Input 
+                    inputType="text"
+                    title="Address"
+                    placeholder="Voter address"
+                    handleClick={(e) => setFormInput({...formInput, address: e.target.value})}
+                />
+
+                <Input 
+                    inputType="text"
+                    title="Position"
+                    placeholder="Voter Position"
+                    handleClick={(e) => setFormInput({...formInput, position: e.target.value})}
+                />
+
+                <div className={Style.Button}>
+                    <Button btnName="Authorized Voter" handleClick={() => {}}/>
+                </div>
+            </div>
+        </div>
+
+        <div className={Style.createdVoter}>
+            <div className={Style.createdVoter_info}>
+                <Image src={images} alt="user Profile"/>
+                <p>Notice For User</p>
+                <p>Coordinator <span>0x939939..</span></p>
+                <p>Only Coordinator can add a new voter for election </p>
             </div>
         </div>
     </div>
