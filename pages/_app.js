@@ -3,13 +3,14 @@ import Navbar from '@/components/Navbar/Navbar'
 import '@/styles/globals.css'
 
 export default function App({ Component, pageProps }) {
-  return 
-  <VotingProvider>
-    <div>
-      <Navbar />
+  return (
+    <VotingProvider>
       <div>
-        <Component {...pageProps} />
+        <Navbar />
+        <div>
+          <Component {...pageProps} />
+        </div>
       </div>
-    </div>
-  </VotingProvider>
+    </VotingProvider>
+  )
 }

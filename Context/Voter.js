@@ -51,11 +51,23 @@ export const VotingProvider = ({children}) => {
         setCurrentAccount(accounts[0]) 
     }
 
+    const uploadToIPFS = async(file) => {
+        try {
+            const added = await client.add({ content: file });
+
+            const url = `https://ipfs.infura.io/ipfs/${added.path}`
+            return url;
+        } catch (error) {
+            setError("Error uploading file to IPFS")
+        }
+    }
+
     return (
         <VotingContext.Provider
             value={{
                 checkIfWalletIsConnected,
-                connectWallet
+                connectWallet,
+                uploadToIPFS
             }}
         >
             {children}

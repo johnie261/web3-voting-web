@@ -7,9 +7,12 @@ import Style from '../styles/index.module.css'
 import Card from '@/components/Card/Card';
 import image from '../public/assets/punk1.jpeg'
 
-
-export default function index() {
+const index = () => {
   return (
-    <div>Home</div>
+    <div>
+      <h1>JOOOOOOOHN</h1>
+    </div>
   )
 }
+
+export default index;
