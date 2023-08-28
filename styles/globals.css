@@ -87,7 +87,10 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background-image: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
