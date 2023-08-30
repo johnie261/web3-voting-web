@@ -143,6 +143,57 @@ export const VotingProvider = ({children}) => {
         }
     }
 
+    const setCandidate = async(candidateForm, fileUrl, router) => {
+        try {
+           const { name, address, age } = candidateForm
+
+           if(!name || !address || !age) return setError("Input data is missing")
+
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            const signer = provider.getSigner()
+            const contract = new ethers.Contract( votingAddress, votingAbi, signer )
+           
+           const data = JSON.stringify({ name, address, image: fileUrl, age })
+           const added = await client.add(data);
+
+           const ipfs = `https://link.infura-ipfs.io/ipfs/${added.path}`
+
+
+           const voter = await contract.setCandidate(address, age, name, fileUrl, ipfs)
+           const receipt = await voter.wait();
+
+           router.push("/")
+        } catch (error) {
+            setError("Something went wrong in creating voter")
+        }
+    }
+
+    const getNewCandidate = async() => {
+        try {
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            const signer = provider.getSigner()
+            const contract = new ethers.Contract( votingAddress, votingAbi, signer )
+
+            const allCandidate = await contract.getCandidate()
+            console.log(allCandidate)
+
+            allCandidate.map(async(elem) => {
+                const singleCandidate = await contract.getCandidatedata(elem)
+                pushCandidate.push(singleCandidate)
+                candidateIndex.push(singleCandidate[2].toNumber())
+            })
+
+            const allCandidateLength = await contract.getCandidateLength()
+            setCandidateLength(allCandidateLength.toNumber())
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     return (
         <VotingContext.Provider
@@ -153,7 +204,16 @@ export const VotingProvider = ({children}) => {
                 client, 
                 createVoters,
                 getAllVoterData,
-                giveVote
+                giveVote,
+                setCandidate,
+                getNewCandidate,
+                error,
+                voterArray,
+                voterLength,
+                voterAddress,
+                currentAccount,
+                candidateLength,
+                candidateArray
             }}
         >
             {children}
