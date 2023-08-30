@@ -4,11 +4,27 @@ import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
+//import ipfsClient from 'ipfs-http-client';
+//const ethers = require('ethers');
+
 
 import { votingAddress, votingAbi } from './Constant';
 
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
+//const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
+const projectId = "2Uf6WUUvPNFDkzGcBYm0Poxnz9W";
+const projectSecretKey = "d8764441ca20104e54364b44cc4464c6";
+const auth = `Basic ${Buffer.from(`${projectId}:${projectSecretKey}`).toString("base64")}`;
+
+const client = ipfsHttpClient({
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    headers: {
+    authorization: auth,
+    }
+});
+    
 const fetchContract = (signerOrProvider) => new ethers.Contract(votingAddress, votingAbi, signerOrProvider);
 
 export const VotingContext = createContext();
@@ -62,12 +78,68 @@ export const VotingProvider = ({children}) => {
         }
     }
 
+    const createVoters = async(formInput, fileUrl, router) => {
+        try {
+           const { name, address, position } = formInput
+
+           if(!name || !address || !position) return console.log("Input data is missing")
+
+           try{
+              const web3Modal = new Web3Modal();
+              const connection = await web3Modal.connect();
+              const provider = new ethers.providers.Web3Provider(connection);
+              const signer = provider.getSigner()
+              const contract = new ethers.Contract(
+                votingAddress,
+                votingAbi,
+                signer
+           )
+
+              console.log("contract", contract)
+           } catch(e) {
+              console.log(e)
+           }
+
+           const data = JSON.stringify({ name, address, position, image: fileUrl })
+           const added = await client.add(data);
+
+           const url = `https://link.infura-ipfs.io/ipfs/${added.path}`
+
+           //console.log("fileurl", url)
+
+           const voter = await contract.voterRight(address, name, url, fileUrl)
+           voter.wait();
+
+           router.push("/voterList")
+        } catch (error) {
+            setError("Error in creating voter")
+        }
+    }
+
+    // const projectId = "ggggggg";
+    // const projectSecret = "23...XXX";
+
+    // const auth = `Basic ` + Buffer.from(projectId + `:` + projectSecret).toString(`base64`);
+    // const clientel = ipfsClient.create({
+    // host: `ipfs.infura.io`,
+    // port: 5001,
+    // protocol: `https`,
+    // headers: {
+    //     authorization: auth,
+    // },
+    // });
+    // clientel.add({ content: file }).then((res) => {
+    //     console.log(res);
+    // });
+
     return (
         <VotingContext.Provider
             value={{
                 checkIfWalletIsConnected,
                 connectWallet,
-                uploadToIPFS
+                uploadToIPFS,
+                client, 
+                createVoters
             }}
         >
             {children}

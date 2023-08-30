@@ -57,6 +57,12 @@
     border-radius: .2rem;
 }
 
+.sideInfo_para {
+    background-color: #9a02ac;
+    padding: .5rem;
+    border-radius: .2rem;    
+}
+
 .card {
    display: grid;
    grid-template-columns: repeat(2, 1fr);
