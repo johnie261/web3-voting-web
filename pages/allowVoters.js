@@ -22,7 +22,7 @@ const allowedVoters = () => {
   })
 
   const router = useRouter()
-  const { client, createVoters } = useContext(VotingContext)
+  const { client, createVoters, voterArray, getAllVoterData } = useContext(VotingContext)
 
   //clean code
 
@@ -54,6 +54,12 @@ const allowedVoters = () => {
       setFileUrl(`https://link.infura-ipfs.io/ipfs/${image.path}`);
     }
   }, [image]);
+
+  useEffect(() => {
+    getAllVoterData()
+  }, [])
+
+  console.log(voterArray)
   
 
  //console.log("fileurl", fileUrl)
@@ -122,19 +128,18 @@ const allowedVoters = () => {
                 </div>
 
                 <div className={Style.card}>
-                    {/* {voterArray.map((e, i) => (
+                    {voterArray.map((e, i) => (
                         <div key={i+1} className={Style.card_box}>
                             <div className={Style.image}>
-                                <img src="" alt="Profile"/>
+                                <img src={e[4]} alt="Profile"/>
                             </div>
 
                             <div className={Style.card_info}>
-                                <p>Name</p>
-                                <p>Address</p>
-                                <p>Details</p>
+                                <p>Name: {e[1]}</p>
+                                <p>Addr: {e[3].slice(0,10)}...</p>
                             </div>
                         </div>
-                    ))} */}
+                    ))}
                 </div>
             </div>
         )}

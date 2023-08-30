@@ -121,7 +121,7 @@ export const VotingProvider = ({children}) => {
         
             voterListData.map(async(elem) => {
                 const singleVoterData = await contract.getVoterdata(elem)
-                pushCandidate.push(singleVoterData); 
+                pushVoter.push(singleVoterData); 
             })
 
             const voterList = await contract.getVoterLength();
@@ -191,6 +191,10 @@ export const VotingProvider = ({children}) => {
             console.log(error)
         }
     }
+ 
+    // useEffect(()=>{
+    //     currentAccount
+    // }, [])
 
 
     return (
