@@ -131,10 +131,6 @@ export const VotingProvider = ({children}) => {
         }
     }
 
-    // useEffect(()=> {
-    //     getAllVoterData()
-    // }, []) 
-
     const giveVote = async(id) => {
         try {
             
@@ -149,6 +145,8 @@ export const VotingProvider = ({children}) => {
 
            if(!name || !address || !age) return setError("Input data is missing")
 
+           console.log(name, address, age, fileUrl)
+
             const web3Modal = new Web3Modal();
             const connection = await web3Modal.connect();
             const provider = new ethers.providers.Web3Provider(connection);
@@ -161,8 +159,8 @@ export const VotingProvider = ({children}) => {
            const ipfs = `https://link.infura-ipfs.io/ipfs/${added.path}`
 
 
-           const voter = await contract.setCandidate(address, age, name, fileUrl, ipfs)
-           const receipt = await voter.wait();
+           const candidate = await contract.setCandidate(address, age, name, fileUrl, ipfs)
+           candidate.wait();
 
            router.push("/")
         } catch (error) {
@@ -179,10 +177,10 @@ export const VotingProvider = ({children}) => {
             const contract = new ethers.Contract( votingAddress, votingAbi, signer )
 
             const allCandidate = await contract.getCandidate()
-            console.log(allCandidate)
 
             allCandidate.map(async(elem) => {
                 const singleCandidate = await contract.getCandidatedata(elem)
+
                 pushCandidate.push(singleCandidate)
                 candidateIndex.push(singleCandidate[2].toNumber())
             })
