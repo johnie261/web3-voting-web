@@ -4,9 +4,6 @@ import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
-//import ipfsClient from 'ipfs-http-client';
-//const ethers = require('ethers');
-
 
 import { votingAddress, votingAbi } from './Constant';
 
@@ -24,8 +21,6 @@ const client = ipfsHttpClient({
     authorization: auth,
     }
 });
-    
-const fetchContract = (signerOrProvider) => new ethers.Contract(votingAddress, votingAbi, signerOrProvider);
 
 export const VotingContext = createContext();
 
@@ -84,53 +79,70 @@ export const VotingProvider = ({children}) => {
 
            if(!name || !address || !position) return console.log("Input data is missing")
 
-           try{
-              const web3Modal = new Web3Modal();
-              const connection = await web3Modal.connect();
-              const provider = new ethers.providers.Web3Provider(connection);
-              const signer = provider.getSigner()
-              const contract = new ethers.Contract(
-                votingAddress,
-                votingAbi,
-                signer
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            const signer = provider.getSigner()
+            const contract = new ethers.Contract(
+              votingAddress,
+              votingAbi,
+              signer
            )
 
-              console.log("contract", contract)
-           } catch(e) {
-              console.log(e)
-           }
-
+            console.log("contract", contract)
+           
            const data = JSON.stringify({ name, address, position, image: fileUrl })
            const added = await client.add(data);
 
            const url = `https://link.infura-ipfs.io/ipfs/${added.path}`
 
-           //console.log("fileurl", url)
 
            const voter = await contract.voterRight(address, name, url, fileUrl)
-           voter.wait();
+           const receipt = await voter.wait();
+          
+           console.log("voter", receipt)
 
            router.push("/voterList")
         } catch (error) {
-            setError("Error in creating voter")
+            setError("Something went wrong in creating voter")
         }
     }
 
-    // const projectId = "ggggggg";
-    // const projectSecret = "23...XXX";
+    const getAllVoterData = async () => {
+        try {
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            const signer = provider.getSigner()
+            const contract = new ethers.Contract( votingAddress, votingAbi, signer )
 
-    // const auth = `Basic ` + Buffer.from(projectId + `:` + projectSecret).toString(`base64`);
-    // const clientel = ipfsClient.create({
-    // host: `ipfs.infura.io`,
-    // port: 5001,
-    // protocol: `https`,
-    // headers: {
-    //     authorization: auth,
-    // },
-    // });
-    // clientel.add({ content: file }).then((res) => {
-    //     console.log(res);
-    // });
+            const voterListData = await contract.getVoterList();
+            setVoterAddress(voterListData);
+        
+            voterListData.map(async(elem) => {
+                const singleVoterData = await contract.getVoterdata(elem)
+                pushCandidate.push(singleVoterData); 
+            })
+
+            const voterList = await contract.getVoterLength();
+            setVoterLength(voterList.toNumber())
+        } catch (error) {
+            setError("Error in getting voter data")
+        }
+    }
+
+    // useEffect(()=> {
+    //     getAllVoterData()
+    // }, []) 
+
+    const giveVote = async(id) => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
 
     return (
         <VotingContext.Provider
@@ -139,7 +151,9 @@ export const VotingProvider = ({children}) => {
                 connectWallet,
                 uploadToIPFS,
                 client, 
-                createVoters
+                createVoters,
+                getAllVoterData,
+                giveVote
             }}
         >
             {children}

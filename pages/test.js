@@ -5,7 +5,7 @@ import React, { useState, useContext } from 'react'
 const test = () => {
 
     const [images, setImages] = useState([])
-    const { client } = useContext(VotingContext)
+    const { client, connectWallet } = useContext(VotingContext)
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
@@ -37,6 +37,7 @@ const test = () => {
 
   return (
     <div className="App">
+      <button type="button" onClick={connectWallet}>connect Wallet</button>
       {client && (
         <>
           <h3>Upload file to IPFS</h3>
