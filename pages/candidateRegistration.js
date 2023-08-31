@@ -43,8 +43,6 @@ const allowedVoters = () => {
     form.reset();
   };
 
-  //console.log("path", image ? image.path : "No images");
-
   useEffect(() => {
     if (image) {
       setFileUrl(`https://link.infura-ipfs.io/ipfs/${image.path}`);
@@ -54,44 +52,6 @@ const allowedVoters = () => {
   useEffect(()=> {
     getNewCandidate()
   }, [])
-
-  console.log(candidateArray)
-  
-
- //console.log("fileurl", fileUrl)
-
-  //clean code
-
-  //usecallback preveent unnecessary re-renders and improve efficiency
-
-//   const onDrop = useCallback(async (acceptedFiles) => {
-//     //const url = await uploadToIPFS(acceptedFiles[0]);
-//     const res = await client.add(acceptedFiles[0])
-
-//     console.log(res)
-//     const contentHash = res.cid.toString();
-//     const path = res.path
-//     setPath(path)
-//     setIpfsHash(contentHash);
-//     //setFileUrl(acceptedFiles[0]);
-
-//     console.log("Path:", path);
-//   });
-
-//   const { getRootProps, getInputProps } = useDropzone({
-//     onDrop,
-//     accept: "image/*",
-//     maxSize: 5000000,
-//   });
-
-//   const getImageUrl = (hash) => {
-//     return `https://link.infura-ipfs.io/ipfs/${ipfsHash}${path}`;
-//   };
-
-//   console.log("mm", ipfsHash)
-//   console.log("image", image)
-//   console.log(`https://link.infura-ipfs.io/ipfs/${ipfsHash}`)
-//   console.log(`https://ipfs.io/ipfs/${ipfsHash}`)
 
   return (
     <div className={Style.createVoter}>
@@ -143,35 +103,6 @@ const allowedVoters = () => {
         </div>
 
         <div className={Style.voter}>
-            {/* <div className={Style.voter_container}>
-                <h1>Create new voter</h1>
-                <div className={Style.voter_container_box}>
-                    <div className={Style.voter_container_box_div}>
-                        <div {...getRootProps()}>
-                            <input {...getInputProps()}/>
-
-                            <div className={Style.voter_container_box_div_info}>
-                                <p>Upload File: JPG, PNG, GIF, WEBM max 10MB</p>
-
-                                <div className={Style.voter_container_box_div_image}>
-                                    <Image 
-                                       src={images}
-                                       height={150}
-                                       width={150}
-                                       objectFit="contain"
-                                       alt="File upload"
-                                    />
-                                </div>
-
-                                <p>Drag & Drop a File</p>
-                                <p>or Browse Media on your device</p>
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-            </div> */}
-
-            {/* <VoterInfo /> */}
 
             <div className={Style.voter}>
                 <div className={Style.voter_container}>

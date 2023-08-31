@@ -23,37 +23,37 @@
 
 const hre = require("hardhat");
 
-async function main() {
-  const [deployer] = await ethers.getSigners();
+// async function main() {
+//   const [deployer] = await ethers.getSigners();
 
-  console.log("Deploying contracts with the account:", deployer.address);
+//   console.log("Deploying contracts with the account:", deployer.address);
 
-  const create = await ethers.deployContract("Create");
+//   const create = await ethers.deployContract("Create");
 
-  console.log("Create address:", await create.getAddress());
-}
+//   console.log("Create address:", await create.getAddress());
+// }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+// main()
+//   .then(() => process.exit(0))
+//   .catch((error) => {
+//     console.error(error);
+//     process.exit(1);
+//   });
 
 
 // const hre = require("hardhat");
 
-// async function main() {
+async function main() {
 
-//   const Create = await hre.ethers.getContractFactory("Create");
-//   const create = await Create.deploy();
+  const Create = await hre.ethers.getContractFactory("Create");
+  const create = await Create.deploy();
 
-//   await create.deployed()
+  await create.deployed()
 
-//   console.log("Create address:", create.address);
-// }
+  console.log("Create address:", create.address);
+}
 
-// main().catch((error) => {
-//   console.log(error);
-//   process.exitCode = 1;
-// })
+main().catch((error) => {
+  console.log(error);
+  process.exitCode = 1;
+})

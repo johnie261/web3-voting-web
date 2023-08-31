@@ -26,7 +26,7 @@ const Card = ({ candidateArray, giveVote }) => {
           </div>
 
           <div className={Style.card_button}>
-            <button onClick={() =>giveVote({id: e[3].toNumber(), address: e[6]})}>
+            <button onClick={() =>giveVote({id: e[2].toNumber(), address: e[6]})}>
               Vote
             </button>
           </div> 
