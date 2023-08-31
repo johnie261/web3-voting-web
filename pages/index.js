@@ -15,12 +15,14 @@ const index = () => {
     checkIfWalletIsConnected,
     candidateLength,
     currentAccount,
-    voterLength
+    voterLength,
+    getAllVoterData
   } = useContext(VotingContext)
 
   useEffect(() => {
     checkIfWalletIsConnected()
     getNewCandidate()
+    getAllVoterData()
   }, [])
 
   console.log(candidateArray)
